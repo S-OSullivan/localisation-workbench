@@ -50,8 +50,9 @@ localisation_workbench/
 ├── pyproject.toml
 ├── README.md
 └── requirements.txt
+```
 
- ## Why I Built This
+## Why I Built This
 
 This project was created as a portfolio demo for technical product roles.
 
@@ -74,12 +75,10 @@ Converts CSV files into JSON files using:
 - the second column header as the language code
 
 Example input:
-<
-id,fr
+<id,fr
 1001,Bonjour
 1002,Au revoir
-1003,Salut
->
+1003,Salut>
 
 Example output:
 {
@@ -124,13 +123,11 @@ Compares two JSON files and produces a text report showing:
 - keys missing from one file
 - a summary of differences
 
-Installation
+## Installation
 
 Create and activate a virtual environment, then install dependencies:
-<
-pip install -r requirements.txt
-python -m pip install -e .
->
+<pip install -r requirements.txt
+python -m pip install -e .>
 
  ## Run the CLI
 
@@ -140,15 +137,16 @@ python -m localisation_workbench.cli --help
 
  ## Run the Streamlit Demo
 
+```bash
 streamlit run app/streamlit_app.py
+``` 
 
-The current UI includes a working CSV-to-JSON flow that allows a user to:
+The Streamlit demo currently supports all four core flows:
 
- - upload a CSV file
- - run the backend conversion
- - preview the JSON output
- - download the generated JSON file
-
+ - CSV to JSON: upload a CSV file, preview the JSON output, and download the generated file
+ - Excel to JSON: upload an Excel workbook and download the generated JSON files as a ZIP archive
+ - JSON to Excel: upload translation JSON files and download a generated Excel workbook
+ - JSON Comparison: upload two JSON files, preview the comparison report, and download it as a text file
 
  ## Testing
 
@@ -178,9 +176,8 @@ This project demonstrates:
 - lightweight UI development with Streamlit
 - Git and GitHub project organization
 
-Next Improvements
+ ## Next Improvements
 - add more automated tests
 - support more validation checks
-- expand the Streamlit UI to cover all conversion flows
 - add screenshots of the demo app
 - improve error handling and user feedback
