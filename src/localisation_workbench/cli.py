@@ -1,10 +1,9 @@
 import argparse
 
-from src.localisation_workbench.converters.csv_to_json import convert_csv_to_json
-from src.localisation_workbench.converters.excel_to_json import convert_excel_to_json
-from src.localisation_workbench.converters.json_compare import compare_json_files
-from src.localisation_workbench.converters.json_to_excel import convert_json_to_excel
-
+from localisation_workbench.converters.csv_to_json import convert_csv_to_json
+from localisation_workbench.converters.excel_to_json import convert_excel_to_json
+from localisation_workbench.converters.json_compare import compare_json_files
+from localisation_workbench.converters.json_to_excel import convert_json_to_excel
 
 def main() -> None:
     parser = argparse.ArgumentParser(
