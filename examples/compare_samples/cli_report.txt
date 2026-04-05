@@ -1,0 +1,24 @@
+JSON Comparison Report
+
+====================================================================================================
+Comparison: file_a.json  <->  file_b.json
+Paths:      /Users/siobhanosullivan/Documents/localisation_workbench/examples/compare_samples/file_a.json  <->  /Users/siobhanosullivan/Documents/localisation_workbench/examples/compare_samples/file_b.json
+====================================================================================================
+Total IDs (union): 4
+Total differing IDs: 3
+  - Value mismatches: 1
+  - Missing in file_b.json: 1
+  - Missing in file_a.json: 1
+Percentage difference: 75.00%
+--------------------------------------------------------------------------------
+ID: 1002  |  Status: DIFFERENT
+  file_a.json @ 3:3: Goodbye
+  file_b.json @ 3:3: Bye
+
+ID: 1003  |  Status: MISSING_IN_file_b.json
+  file_a.json @ 4:3: Thanks
+  file_b.json @ N/A: null
+
+ID: 1004  |  Status: MISSING_IN_file_a.json
+  file_a.json @ N/A: null
+  file_b.json @ 4:3: Welcome
