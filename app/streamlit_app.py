@@ -9,6 +9,7 @@ from localisation_workbench.converters.csv_to_json import convert_csv_to_json
 from localisation_workbench.converters.excel_to_json import convert_excel_to_json
 from localisation_workbench.converters.json_compare import compare_json_files
 from localisation_workbench.converters.json_to_excel import convert_json_to_excel
+from localisation_workbench.scoring_io import score_csv_file
 
 
 st.set_page_config(page_title="Localisation Workbench", layout="wide")
@@ -30,7 +31,8 @@ with right_col:
 - Excel to JSON
 - JSON to Excel
 - JSON Comparison
-"""
+- Translation Quality Scoring
+    """
     )
 
 tool = st.radio(
@@ -40,6 +42,7 @@ tool = st.radio(
         "Excel to JSON",
         "JSON to Excel",
         "JSON Comparison",
+        "Translation Quality Scoring",
     ],
     horizontal=True,
 )
@@ -151,6 +154,61 @@ elif tool == "JSON to Excel":
             data=output_bytes,
             file_name="translations.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+elif tool == "Translation Quality Scoring":
+    st.header("Translation Quality Scoring")
+    st.caption(
+        "Upload a CSV file with source and translation columns, with an optional reference column, to generate a scored QA output file."
+    )
+
+    uploaded_scoring_csv = st.file_uploader(
+        "Upload a scoring CSV file",
+        type=["csv"],
+        key="scoring_csv",
+    )
+    source_column = st.text_input("Source column name", value="source")
+    translation_column = st.text_input("Translation column name", value="translation")
+    reference_column = st.text_input(
+        "Reference column name (optional)",
+        value="reference",
+    )
+
+    if uploaded_scoring_csv is not None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_path = Path(tmp_dir)
+            input_path = tmp_path / uploaded_scoring_csv.name
+            output_path = tmp_path / "scored_translations.csv"
+
+            input_path.write_bytes(uploaded_scoring_csv.getvalue())
+
+            output_file = score_csv_file(
+                str(input_path),
+                str(output_path),
+                source_column=source_column,
+                translation_column=translation_column,
+                reference_column=reference_column or None,
+            )
+
+            output_text = Path(output_file).read_text(encoding="utf-8")
+            output_lines = output_text.strip().splitlines()
+
+            total_rows = max(len(output_lines) - 1, 0)
+            passed_rows = sum(1 for line in output_lines[1:] if ",True," in line)
+            failed_rows = total_rows - passed_rows
+
+        st.success("Scored CSV created.")
+        metric_col_1, metric_col_2, metric_col_3 = st.columns(3)
+        metric_col_1.metric("Rows scored", total_rows)
+        metric_col_2.metric("Passed", passed_rows)
+        metric_col_3.metric("Failed", failed_rows)
+        st.markdown("### Output preview")
+        st.code(output_text, language="text")
+
+        st.download_button(
+            label="Download scored CSV",
+            data=output_text,
+            file_name="scored_translations.csv",
+            mime="text/csv",
         )
 
 elif tool == "JSON Comparison":

@@ -1,0 +1,6 @@
+source,translation,reference,qa_score,reference_score,score,max_score,passed,issues
+Hello {name},Bonjour {name},Bonjour {name},,100.0,100,100,True,
+Start course,Start course,Commencer le cours,,46.67,61,100,False,Translation is identical to source text.
+Welcome,,Bienvenue,50,,50,100,False,Translation text is empty.
+Reset password,Réinitialiser mot de passe,Réinitialiser le mot de passe,,94.55,97,100,True,
+You have {count} new messages,Vous avez de nouveaux messages,Vous avez {count} nouveaux messages,,86.15,86,100,True,Placeholder count does not match source text.

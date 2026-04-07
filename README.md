@@ -8,10 +8,11 @@ Localisation teams often work across multiple file types and manually convert da
 
 Localisation Workbench is a lightweight product demo that simplifies those workflows by providing:
 
-- reusable Python conversion modules
+- reusable Python conversion and scoring modules
 - a command-line interface
 - a Streamlit demo UI
 - comparison reporting for JSON files
+- hybrid translation quality scoring for localisation QA workflows
 
 ## Features
 
@@ -19,25 +20,26 @@ Localisation Workbench is a lightweight product demo that simplifies those workf
 - Convert Excel to JSON
 - Convert folder-based JSON files to Excel
 - Compare two JSON files and generate a text report
+- Hybrid translation quality scoring with rule-based QA checks and optional reference-based similarity scoring
 - Preview and download converted JSON in a simple UI
+
 
 ## Project Structure
 
-```text
-localisation_workbench/
-├── app/
-│   └── streamlit_app.py
-├── examples/
+```├── examples/
 │   ├── compare_samples/
 │   ├── json_to_excel_sample/
 │   ├── output/
 │   ├── main-fr.json
 │   ├── sample_fr.csv
-│   └── sample_translations.xlsx
+│   ├── sample_translations.xlsx
+│   └── sample_quality_input_with_reference.csv
 ├── src/
 │   └── localisation_workbench/
 │       ├── __init__.py
 │       ├── cli.py
+│       ├── quality_scoring.py
+│       ├── scoring_io.py
 │       └── converters/
 │           ├── __init__.py
 │           ├── csv_to_json.py
@@ -45,12 +47,32 @@ localisation_workbench/
 │           ├── json_compare.py
 │           └── json_to_excel.py
 ├── tests/
-│   └── test_csv_to_json.py
-├── .gitignore
-├── pyproject.toml
-├── README.md
-└── requirements.txt
+│   ├── test_cli.py
+│   ├── test_csv_to_json.py
+│   ├── test_quality_scoring.py
+│   └── test_scoring_io.py
 ```
+## Translation Quality Scoring
+
+The toolkit now supports hybrid translation quality scoring for localisation QA workflows.
+
+It combines:
+
+- rule-based QA checks, such as empty translations, identical source/target text, and placeholder mismatches
+- optional reference-based similarity scoring when a reference translation is available
+
+This can be used through:
+
+- Python scoring functions
+- the command-line interface for single translation pairs
+- the command-line interface for CSV-based batch scoring
+
+## Example CLI Usage
+
+Score a CSV file with source, translation, and reference columns:
+
+```bash
+PYTHONPATH=src python -m localisation_workbench.cli score-csv examples/sample_quality_input_with_reference.csv examples/sample_quality_output.csv --reference-column reference
 
 ## Why I Built This
 
