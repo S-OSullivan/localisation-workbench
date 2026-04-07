@@ -4,6 +4,9 @@ from localisation_workbench.converters.csv_to_json import convert_csv_to_json
 from localisation_workbench.converters.excel_to_json import convert_excel_to_json
 from localisation_workbench.converters.json_compare import compare_json_files
 from localisation_workbench.converters.json_to_excel import convert_json_to_excel
+from localisation_workbench.quality_scoring import score_translation_pair
+from localisation_workbench.scoring_io import score_csv_file
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(
@@ -39,6 +42,35 @@ def main() -> None:
         help="Output Excel filename",
     )
 
+    score_parser = subparsers.add_parser(
+        "score-translation",
+        help="Score a single source and translation pair",
+    )
+    score_parser.add_argument("source_text", help="Source text")
+    score_parser.add_argument("translation_text", help="Translation text")
+
+    score_csv_parser = subparsers.add_parser(
+        "score-csv",
+        help="Score translation rows from a CSV file",
+    )
+    score_csv_parser.add_argument("input_csv", help="Path to the input CSV file")
+    score_csv_parser.add_argument("output_csv", help="Path to the output CSV file")
+    score_csv_parser.add_argument(
+        "--source-column",
+        default="source",
+        help="Source text column name",
+    )
+    score_csv_parser.add_argument(
+        "--translation-column",
+        default="translation",
+        help="Translation text column name",
+    )
+    score_csv_parser.add_argument(
+        "--reference-column",
+        default=None,
+        help="Optional reference text column name",
+    )
+
     args = parser.parse_args()
 
     if args.command == "csv-to-json":
@@ -62,6 +94,27 @@ def main() -> None:
             base_lang=args.base_lang,
             target_lang=args.target_lang,
             output_filename=args.output_filename,
+        )
+        print(f"Created: {output_file}")
+
+    elif args.command == "score-translation":
+        result = score_translation_pair(args.source_text, args.translation_text)
+        print(f"Score: {result.score}/{result.max_score}")
+        print(f"Passed: {result.passed}")
+        if result.issues:
+            print("Issues:")
+            for issue in result.issues:
+                print(f"- {issue}")
+        else:
+            print("Issues: none")
+
+    elif args.command == "score-csv":
+        output_file = score_csv_file(
+            args.input_csv,
+            args.output_csv,
+            source_column=args.source_column,
+            translation_column=args.translation_column,
+            reference_column=args.reference_column,
         )
         print(f"Created: {output_file}")
 

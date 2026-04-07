@@ -1,0 +1,6 @@
+source,translation,reference
+Hello {name},Bonjour {name},Bonjour {name}
+Start course,Start course,Commencer le cours
+Welcome,,Bienvenue
+Reset password,Réinitialiser mot de passe,Réinitialiser le mot de passe
+You have {count} new messages,Vous avez de nouveaux messages,Vous avez {count} nouveaux messages
